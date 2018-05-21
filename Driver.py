@@ -95,40 +95,35 @@ def step_characteristic(angular_flux_pos_lhs, angular_flux_pos_rhs, scalar_flux_
 
 # Beginning of the Deterministic solver program.
 # Create the cell array which designates the material present in each cell
-mox_cell = ['water', 'water', 'MOX', 'MOX', 'MOX', 'MOX', 'water', 'water']
-u_cell = ['water', 'water', 'U', 'U', 'U', 'U', 'water', 'water']
+mox1_cell = ['water', 'water', 'MOX1', 'MOX1', 'MOX1', 'MOX1', 'water', 'water']
+mox2_cell = ['water', 'water', 'MOX2', 'MOX2', 'MOX2', 'MOX2', 'water', 'water']
+mox3_cell = ['water', 'water', 'MOX3', 'MOX3', 'MOX3', 'MOX3', 'water', 'water']
+mox4_cell = ['water', 'water', 'MOX4', 'MOX4', 'MOX4', 'MOX4', 'water', 'water']
+u1_cell = ['water', 'water', 'U1', 'U1', 'U1', 'U1', 'water', 'water']
+u1_cell = ['water', 'water', 'U2', 'U2', 'U2', 'U2', 'water', 'water']
+
 material_cell = []
 for i in range(8):
-    material_cell += u_cell
+    material_cell += u1_cell
 
 # Create the material specifications for each problem
-materials_mox1 = [[0.2, 0.2, 0.0, 0.0, 1.0, 0.6, 0.0, 0.0, 0.90, 0.0],
-               [0.2, 0.2, 0.0, 0.0, 1.0, 0.2, 0.0, 0.0, 0.30, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
-materials_mox2 = [[0.2, 0.185, 0.015, 0.0, 1.2, 0.9, 0.0, 0.0, 0.45, 0.0],
-               [0.2, 0.2, 0.0, 0.0, 1.0, 0.2, 0.0, 0.0, 0.30, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
-materials_mox3 = [[0.2, 0.185, 0.015, 0.0, 1.0, 1.13, 0.9, 0.0, 0.345, 0.0],
-               [0.2, 0.185, 0.015, 0.0, 1.0, 1.0, 0.9, 0.0, 0.15, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
-materials_mox4 = [[0.2, 0.185, 0.015, 0.0, 1.0, 1.07, 0.9, 0.0, 0.255, 0.0],
-               [0.2, 0.185, 0.015, 0.0, 1.0, 1.0, 0.9, 0.0, 0.15, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
-materials_u1 = [[0.2, 0.2, 0.0, 0.0, 1.0, 0.2, 0.0, 0.0, 0.3, 0.0],
-               [0.2, 0.2, 0.0, 0.0, 1.0, 0.2, 0.0, 0.0, 0.3, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
-materials_u2 = [[0.2, 0.185, 0.015, 0.0, 1.0, 1.0, 0.9, 0.0, 0.15, 0.0],
-               [0.2, 0.185, 0.015, 0.0, 1.0, 1.0, 0.9, 0.0, 0.15, 0.0],
-               [0.2, 0.17, 0.03, 0.0, 0.0, 1.1, 1.1, 0.0, 0.0, 0.0]]
+materials_full = [[0.2, 0.2,   0.0,   0.0, 1.0, 0.6,  0.0, 0.0, 0.90,  0.0],
+                  [0.2, 0.185, 0.015, 0.0, 1.0, 1.2,  0.9, 0.0, 0.45,  0.0],
+                  [0.2, 0.185, 0.015, 0.0, 1.0, 1.13, 0.9, 0.0, 0.345, 0.0],
+                  [0.2, 0.185, 0.015, 0.0, 1.0, 1.07, 0.9, 0.0, 0.255, 0.0],
+                  [0.2, 0.2,   0.0,   0.0, 1.0, 0.2,  0.0, 0.0, 0.3,   0.0],
+                  [0.2, 0.185, 0.015, 0.0, 1.0, 1.0,  0.9, 0.0, 0.15,  0.0],
+                  [0.2, 0.17,  0.03,  0.0, 0.0, 1.1,  1.1, 0.0, 0.0,   0.0]]
+
 
 # Create a data from for the material cross sections to be used for each material
 material_data = \
-    pd.DataFrame(materials_mox1, columns=['total_fast', 'inscatter_fast', 'downscatter_fast',
+    pd.DataFrame(materials_full, columns=['total_fast', 'inscatter_fast', 'downscatter_fast',
                                         'nusigmaf_fast', 'chi_fast',
                                        'total_thermal', 'inscatter_thermal',
                                        'downscatter_thermal', 'nusigmaf_thermal',
                                        'chi_thermal'],
-                             index=['MOX', 'U', 'water'])
+                                index=['MOX1', 'MOX2','MOX3','MOX4','U1','U2', 'water'])
 material_data = material_data.T
 mu_n = np.array([[-0.973906528517, -0.865063366689, -0.679409568299,
                   -0.433395394129, -0.148874338982,
